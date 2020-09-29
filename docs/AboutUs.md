@@ -29,7 +29,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](http://github.com/ChooJiaXin)]
 [[portfolio](team/choojiaxin.md)]
 
-* Role: Deliverables and deadlines
+* Role: Developer; Deliverables and deadlines
 * Responsibilities: Code quality
 
 ### Jerry Ho
@@ -38,8 +38,8 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 [[github](http://github.com/printinghelloworld)] [[portfolio](team/printinghelloworld.md)]
 
-* Role: Deliverables and deadlines
-* Responsibilities: UI
+* Role: Developer; Deliverables and deadlines
+* Responsibilities: Documentation
 
 ### Hwang Yong Kang
 
@@ -48,8 +48,8 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](http://github.com/hyngkng)]
 [[portfolio](team/hyngkng.md)]
 
-* Role: Deliverables and deadlines
-* Responsibilities: JUnit testing
+* Role: Developer; Deliverables and deadlines
+* Responsibilities: Testing
 
 ### Nguyen Hoang Hai Minh
 
@@ -58,5 +58,5 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 [[github](http://github.com/minhhhnguyen2000)]
 [[portfolio](team/minhhhnguyen2000.md)]
 
-* Role: Deliverables and deadlines
-* Responsibilities: JUnit testing
+* Role: Developer; Deliverables and deadlines
+* Responsibilities: Testing
