@@ -617,7 +617,14 @@ You can paste the command into the command box after step 3 and repeat step 2-3 
 DIAGRAM
 
 **Q**: I double-clicked the productivenus.jar file but the app is not starting. What should I do?
-**A**: 
+
+**A**:
+This is most likely caused by the `security and privacy setting` of your operating system. You can either modify your
+`security and privacy setting` (depends on your operating system) or run ProductiveNUS with the `command prompt`.
+
+Below are the instructions for using the command prompt to open ProductiveNUS for Windows Users.
+Ubuntu and MacOS follow the similar instructions but with a different way of opening the `command prompt` and a different `cd` command syntax.
+
 *For Windows Users:*
 1. Go to the folder where you have downloaded and saved the productivenus.jar file.
 2. Copy the file directory of the folder. The file directory is labelled in the diagram below.
