@@ -595,40 +595,41 @@ ProductiveNUS data are saved in the hard disk automatically after any command th
 
 **Q**: I am not free during the time that my assignment has been scheduled. How do I reschedule?<br>
 **A**:
-You can reschedule by using the schedule command on that assignment again.
+You can reschedule by using the schedule command on that assignment again.<br>
 
-1. Find out the index of the assignment that you want to reschedule.
-
-DIAGRAM
-
-2. Type the schedule command with the correct index into the command box .
-
-DIAGRAM
-
+1. Type the schedule command into the Command Box with the index of the assignment that you want to reschedule. You can refer to the diagram below.<br>
+   ![UserGuideReschedule](images/UserGuideReschedule.PNG)
+   *Figure 20a: Index of the assignment to reschedule labelled*
+   
 <div markdown="span" class="alert alert-success">
 **:bulb: Tip:**
 You can copy the entire command if you intend to reschedule the assignment more than once. 
-You can paste the command into the command box after step 3 and repeat step 2-3 until you have obtain your
+You can paste the command into the command box after step 2 and repeat step 1-2 until you have obtained your
  ideal schedule.
 </div>
 
-3. Press ENTER to reschedule your assignment.
+2. Press ENTER to reschedule your assignment and your assignment will be scheduled to another time or day as shown in the diagram below.<br>
+   ![UserGuideRescheduleSuccess](images/UserGuideRescheduleSuccess.PNG)
+   *Figure 20b: New suggested time for assignment labelled*
+<br>
 
-DIAGRAM
-
-**Q**: I double-clicked the productivenus.jar file but the app is not starting. What should I do?
-**A**: 
+**Q**: I double-clicked the productivenus.jar file but the app is not starting. What should I do?<br>
+**A**: <br>
 *For Windows Users:*
-1. Go to the folder where you have downloaded and saved the productivenus.jar file.
-2. Copy the file directory of the folder. The file directory is labelled in the diagram below.
-DIAGRAM
-3. Open your command interpreter. To do so, press the Windows key on your keyboard, type in `cmd` and press ENTER.
-4. Your command interpreter will start, and the command interpreter should look something similar to the diagram below.
-<br>
-DIAGRAM
-4. In the command interpreter, type `cd ` and paste the file directory that you have copied in step 2.
-<br>For example, `cd C:\Desktop\ProductiveNUS`.
-5. Press ENTER and the file directory will be shown in the command interpreter.
-<br>
-DIAGRAM
+1. Open the folder where you have downloaded and saved the productivenus.jar file.
+2. Copy the file directory of the folder. You can refer to the labelled diagram below.<br>
+   ![UserGuideLocateDirectory](images/UserGuideLocateDirectory.PNG)
+   *Figure 21a: File directory labelled*
+   
+3. Open your command prompt. To do so, press the Windows key on your keyboard, type in `cmd` and press ENTER.
+4. Your command prompt will start, and it should look something similar to the diagram below.<br>
+   ![UserGuideCommandPrompt](images/UserGuideCommandPrompt.PNG)
+   *Figure 21b: Interface of Command Prompt*
+   
+4. In the command prompt, type `cd ` and paste the file directory that you have copied in step 2.
+<br>For example, `cd C:\Users\YourUserName\Desktop\ProductiveNUS`.
+5. Press ENTER and the file directory will be shown in the command prompt as shown in the diagram below.<br>
+   ![UserGuideChangeDirectory](images/UserGuideChangeDirectory.PNG)
+   *Figure 21c: After changing file directory in Command Prompt*
+   
 6. Finally, type `java -jar productivenus.jar` and press ENTER to start the app.
