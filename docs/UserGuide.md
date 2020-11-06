@@ -613,7 +613,6 @@ You can paste the command into the command box after step 2 and repeat step 1-2 
    *Figure 20b: New suggested time for assignment labelled*
 <br>
 
-<<<<<<< HEAD
 **Q**: I double-clicked the productivenus.jar file but the app is not starting. What should I do?
 
 **A**:
@@ -623,10 +622,6 @@ This is most likely caused by the `security and privacy setting` of your operati
 Below are the instructions for using the command prompt to open ProductiveNUS for Windows Users.
 Ubuntu and MacOS follow the similar instructions but with a different way of opening the `command prompt` and a different `cd` command syntax.
 
-=======
-**Q**: I double-clicked the productivenus.jar file but the app is not starting. What should I do?<br>
-**A**: <br>
->>>>>>> master
 *For Windows Users:*
 1. Open the folder where you have downloaded and saved the productivenus.jar file.
 2. Copy the file directory of the folder. You can refer to the labelled diagram below.<br>
