@@ -68,8 +68,8 @@ public class DoneCommandTest {
         Assignment secondAssignmentToMarkDone = model.getFilteredAssignmentList()
                 .get(INDEX_SECOND_ASSIGNMENT.getZeroBased());
 
-        assignmentsToMarkDone.add(secondAssignmentToMarkDone);
         assignmentsToMarkDone.add(firstAssignmentToMarkDone);
+        assignmentsToMarkDone.add(secondAssignmentToMarkDone);
 
         DoneCommand doneCommand = new DoneCommand(indexesToMarkDone);
 

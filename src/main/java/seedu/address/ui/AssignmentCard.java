@@ -176,7 +176,6 @@ public class AssignmentCard extends UiPart<Region> {
     public void getDueDate(Label label, Time deadline) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime due = LocalDateTime.parse(deadline.value, inputFormat);
-        String formattedDue = due.format(DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"));
         Duration duration = Duration.between(now, due);
 
         if (duration.toMinutes() < 0) {

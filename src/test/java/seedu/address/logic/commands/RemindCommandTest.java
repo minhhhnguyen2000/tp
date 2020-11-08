@@ -55,6 +55,29 @@ public class RemindCommandTest {
         expectedModel.setAssignment(model.getFilteredAssignmentList().get(0), assignmentToRemind);
 
         assertCommandSuccess(remindCommand, model, expectedMessage, expectedModel);
+
+        // Set reminders for last assignment
+        Index indexLastAssignment = Index.fromOneBased(
+                model.getProductiveNus().getAssignmentList().size());
+        indexesToRemind.remove(INDEX_FIRST_ASSIGNMENT);
+        indexesToRemind.add(indexLastAssignment);
+
+        Assignment assignmentToRemindLast = model.getProductiveNus().getAssignmentList()
+                .get(indexLastAssignment.getZeroBased());
+        RemindCommand remindCommandLast = new RemindCommand(indexesToRemind);
+        assignmentsToRemind.remove(assignmentToRemind);
+        assignmentsToRemind.add(assignmentToRemindLast);
+
+
+        String expectedMessageLast = String.format(
+                RemindCommand.MESSAGE_REMIND_ASSIGNMENT_SUCCESS, assignmentsToRemind);
+
+        ModelManager expectedModelLast = new ModelManager(model.getProductiveNus(), new UserPrefs(),
+                model.getPreviousModel());
+        expectedModelLast.setAssignment(model.getProductiveNus().getAssignmentList()
+                .get(indexLastAssignment.getZeroBased()), assignmentToRemindLast);
+
+        assertCommandSuccess(remindCommandLast, model, expectedMessageLast, expectedModelLast);
     }
 
     @Test
@@ -64,10 +87,18 @@ public class RemindCommandTest {
         RemindCommand remindCommand = new RemindCommand(indexesToRemind);
 
         assertCommandFailure(remindCommand, model, Messages.MESSAGE_INVALID_ASSIGNMENT_DISPLAYED_INDEX);
+
+        // Zero index (boundary value)
+        Index zeroIndex = Index.fromZeroBased(0);
+        indexesToRemind.add(zeroIndex);
+
+        RemindCommand remindCommandZero = new RemindCommand(indexesToRemind);
+        assertCommandFailure(remindCommandZero, model, Messages.MESSAGE_INVALID_ASSIGNMENT_DISPLAYED_INDEX);
     }
 
     @Test
     public void execute_validIndexFilteredList_success() {
+        // For testing filtered lists, there is only one assignment in the filtered list
         showAssignmentAtIndex(model, INDEX_FIRST_ASSIGNMENT);
         indexesToRemind.add(INDEX_FIRST_ASSIGNMENT);
 
@@ -87,6 +118,7 @@ public class RemindCommandTest {
     public void execute_invalidIndexFilteredList_throwsCommandException() {
         showAssignmentAtIndex(model, INDEX_FIRST_ASSIGNMENT);
 
+        // Size of filtered assignment list + 1
         Index outOfBoundIndex = INDEX_SECOND_ASSIGNMENT;
         indexesToRemind.add(outOfBoundIndex);
 
@@ -95,6 +127,13 @@ public class RemindCommandTest {
 
         RemindCommand remindCommand = new RemindCommand(indexesToRemind);
         assertCommandFailure(remindCommand, model, Messages.MESSAGE_INVALID_ASSIGNMENT_DISPLAYED_INDEX);
+
+        // Zero index (boundary value)
+        Index zeroIndex = Index.fromZeroBased(0);
+        indexesToRemind.add(zeroIndex);
+
+        RemindCommand remindCommandZero = new RemindCommand(indexesToRemind);
+        assertCommandFailure(remindCommandZero, model, Messages.MESSAGE_INVALID_ASSIGNMENT_DISPLAYED_INDEX);
     }
 
     @Test
@@ -108,12 +147,12 @@ public class RemindCommandTest {
         Assignment secondAssignmentToRemind = model.getFilteredAssignmentList()
                 .get(INDEX_SECOND_ASSIGNMENT.getZeroBased());
 
-        assignmentsToRemind.add(secondAssignmentToRemind);
         assignmentsToRemind.add(firstAssignmentToRemind);
+        assignmentsToRemind.add(secondAssignmentToRemind);
 
         RemindCommand remindCommand = new RemindCommand(indexesToRemind);
 
-        String expectedMessage = String.format(RemindCommand.MESSAGE_REMIND_ASSIGNMENT_SUCCESS, assignmentsToRemind);
+        String expectedMessage = String.format(RemindCommand.MESSAGE_REMIND_ASSIGNMENTS_SUCCESS, assignmentsToRemind);
 
         ModelManager expectedModel = new ModelManager(model.getProductiveNus(), new UserPrefs(), null);
         expectedModel.setAssignment(model.getFilteredAssignmentList().get(0), firstAssignmentToRemind);

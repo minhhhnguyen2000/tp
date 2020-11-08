@@ -6,6 +6,7 @@ import static seedu.address.testutil.TypicalAssignments.getTypicalProductiveNus;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +27,7 @@ public class ListCommandTest {
 
     private Model model;
     private Model expectedModel;
-    private Index index;
+    private Optional<Index> index;
 
     private Predicate<Assignment> showLimitedAssignments() {
         return assignment -> {
@@ -34,7 +35,10 @@ public class ListCommandTest {
                     .withResolverStyle(ResolverStyle.STRICT);
             String dateAndTimeToParse = assignment.getDeadline().value;
             LocalDateTime currentDateAndTime = LocalDateTime.now();
-            LocalDateTime lastDateAndTime = currentDateAndTime.plusDays(index.getZeroBased());
+            assert index.isPresent();
+            int zeroBaseValue = index.get().getZeroBased();
+            long inputNumberOfDays = Optional.of(zeroBaseValue).get();
+            LocalDateTime lastDateAndTime = currentDateAndTime.plusDays(inputNumberOfDays);
             LocalDateTime parsedDateAndTime = LocalDateTime.parse(dateAndTimeToParse, inputFormat);
 
             boolean isAfterCurrentDateAndTime = parsedDateAndTime.isAfter(currentDateAndTime);
@@ -52,40 +56,39 @@ public class ListCommandTest {
 
     @Test
     public void execute_listIsNotFiltered_showsSameList() {
-        index = Index.fromZeroBased(0);
-        assertCommandSuccess(new ListCommand(index), model, String.format(
+        assertCommandSuccess(new ListCommand(), model, String.format(
                 Messages.MESSAGE_ASSIGNMENTS_LISTED_OVERVIEW, model.getFilteredAssignmentList().size()), expectedModel);
     }
 
     @Test
     public void execute_oneDayFromCurrentDate_showAssignments() {
-        index = Index.fromZeroBased(1);
+        index = Optional.of(Index.fromZeroBased(1));
         model.updateFilteredAssignmentList(showLimitedAssignments());
         String expectedMessage = String.format(
                 Messages.MESSAGE_ASSIGNMENTS_LISTED_OVERVIEW, model.getFilteredAssignmentList().size());
-        ListCommand listForOneDay = new ListCommand(index);
+        ListCommand listForOneDay = new ListCommand(index.get());
         expectedModel.updateFilteredAssignmentList(showLimitedAssignments());
         assertCommandSuccess(listForOneDay, model, expectedMessage, expectedModel);
     }
 
     @Test
     public void execute_tenDaysFromCurrentDate_showAssignments() {
-        index = Index.fromZeroBased(10);
+        index = Optional.of(Index.fromZeroBased(10));
         model.updateFilteredAssignmentList(showLimitedAssignments());
         String expectedMessage = String.format(
                 Messages.MESSAGE_ASSIGNMENTS_LISTED_OVERVIEW, model.getFilteredAssignmentList().size());
-        ListCommand listForTenDays = new ListCommand(index);
+        ListCommand listForTenDays = new ListCommand(index.get());
         expectedModel.updateFilteredAssignmentList(showLimitedAssignments());
         assertCommandSuccess(listForTenDays, model, expectedMessage, expectedModel);
     }
 
     @Test
     public void execute_fiftyDaysFromCurrentDate_showAssignments() {
-        index = Index.fromZeroBased(50);
+        index = Optional.of(Index.fromZeroBased(50));
         model.updateFilteredAssignmentList(showLimitedAssignments());
         String expectedMessage = String.format(
                 Messages.MESSAGE_ASSIGNMENTS_LISTED_OVERVIEW, model.getFilteredAssignmentList().size());
-        ListCommand listForFiftyDays = new ListCommand(index);
+        ListCommand listForFiftyDays = new ListCommand(index.get());
         expectedModel.updateFilteredAssignmentList(showLimitedAssignments());
         assertCommandSuccess(listForFiftyDays, model, expectedMessage, expectedModel);
     }

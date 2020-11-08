@@ -34,6 +34,7 @@ public class UpcomingTaskListPanel extends UiPart<Region> {
     private static final String DUE_SOON_STYLE_CLASS = "due-soon";
     private static final String OVERDUE_STYLE_CLASS = "overdue";
     private static final String DUE_IN_A_WEEK_STYLE_CLASS = "due-in-a-week";
+    private static final String DISPLAY_DATE_AND_TIME_FORMAT = "dd MMM yyyy HH:mm";
     private final Logger logger = LogsCenter.getLogger(UpcomingTaskListPanel.class);
 
     @FXML
@@ -51,7 +52,7 @@ public class UpcomingTaskListPanel extends UiPart<Region> {
     public static void getDueDate(Label label, Time deadline) {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime due = LocalDateTime.parse(deadline.value, inputFormat);
-        String formattedDue = due.format(DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm"));
+        String formattedDue = due.format(DateTimeFormatter.ofPattern(DISPLAY_DATE_AND_TIME_FORMAT));
         Duration duration = Duration.between(now, due);
         if (duration.toMinutes() < 0) {
             setStyleToIndicateOverdue(label);

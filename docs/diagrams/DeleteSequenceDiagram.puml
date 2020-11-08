@@ -3,31 +3,39 @@
 
 box Logic LOGIC_COLOR_T1
 participant ":LogicManager" as LogicManager LOGIC_COLOR
-participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":ProductiveNusParser" as ProductiveNusParser LOGIC_COLOR
 participant ":DeleteCommandParser" as DeleteCommandParser LOGIC_COLOR
+participant ":ParserUtil" as ParserUtil LOGIC_COLOR
 participant "d:DeleteCommand" as DeleteCommand LOGIC_COLOR
+participant "d:CommandLogic" as CommandLogic LOGIC_COLOR
 participant ":CommandResult" as CommandResult LOGIC_COLOR
 end box
 
 box Model MODEL_COLOR_T1
-participant ":Model" as Model MODEL_COLOR
+participant "model:Model" as Model MODEL_COLOR
 end box
 
-[-> LogicManager : execute("delete 1")
+[-> LogicManager : execute("delete 1 2")
 activate LogicManager
 
-LogicManager -> AddressBookParser : parseCommand("delete 1")
-activate AddressBookParser
+LogicManager -> ProductiveNusParser : parseCommand("delete 1 2")
+activate ProductiveNusParser
 
 create DeleteCommandParser
-AddressBookParser -> DeleteCommandParser
+ProductiveNusParser -> DeleteCommandParser
 activate DeleteCommandParser
 
-DeleteCommandParser --> AddressBookParser
+DeleteCommandParser --> ProductiveNusParser
 deactivate DeleteCommandParser
 
-AddressBookParser -> DeleteCommandParser : parse("1")
+ProductiveNusParser -> DeleteCommandParser : parse("1 2")
 activate DeleteCommandParser
+
+DeleteCommandParser -> ParserUtil : parseIndexes("1 2")
+activate ParserUtil
+ParserUtil --> DeleteCommandParser : List<Index> parsedIndexes
+deactivate ParserUtil
+
 
 create DeleteCommand
 DeleteCommandParser -> DeleteCommand
@@ -36,23 +44,40 @@ activate DeleteCommand
 DeleteCommand --> DeleteCommandParser : d
 deactivate DeleteCommand
 
-DeleteCommandParser --> AddressBookParser : d
+DeleteCommandParser --> ProductiveNusParser : d
 deactivate DeleteCommandParser
 'Hidden arrow to position the destroy marker below the end of the activation bar.
-DeleteCommandParser -[hidden]-> AddressBookParser
+DeleteCommandParser -[hidden]-> ProductiveNusParser
 destroy DeleteCommandParser
 
-AddressBookParser --> LogicManager : d
-deactivate AddressBookParser
+ProductiveNusParser --> LogicManager : d
+deactivate ProductiveNusParser
 
 LogicManager -> DeleteCommand : execute()
 activate DeleteCommand
 
-DeleteCommand -> Model : deletePerson(1)
+DeleteCommand -> Model : getFilteredAssignmentList()
 activate Model
-
 Model --> DeleteCommand
 deactivate Model
+
+DeleteCommand -> CommandLogic : checkForDuplicatedIndexes({1,2})
+activate CommandLogic
+CommandLogic --> DeleteCommand
+deactivate CommandLogic
+
+DeleteCommand -> CommandLogic : checkForInvalidIndexes({1,2}, model, DeleteCommand.MESSAGE_USAGE)
+activate CommandLogic
+CommandLogic --> DeleteCommand
+deactivate CommandLogic
+
+loop 2 times
+    DeleteCommand -> Model : deleteAssignment(assignmentToDelete)
+    activate Model
+
+    Model --> DeleteCommand
+    deactivate Model
+end
 
 create CommandResult
 DeleteCommand -> CommandResult

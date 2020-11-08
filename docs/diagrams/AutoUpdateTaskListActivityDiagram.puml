@@ -1,0 +1,34 @@
+@startuml
+!include style.puml
+
+(*)  --> "Open ProductiveNUS"
+--> ===B1===
+--> "Run JavaFX thread"
+--> "User enters command"
+If "[exit command entered]" then
+--> [Yes] "Stop running JavaFX thread"
+--> ===B2===
+else
+--> [No] "Update GUI according to command"
+--> "User enters command"
+Endif
+
+===B1=== --> "Start Timer"
+--> Check if user exits
+If "[User exits]" then
+--> [No] "Check deadline of next task"
+"Check deadline of next task" --> If "[current time > deadline of task]" then
+    --> [Yes] "Remove task from task list"
+    --> "Get next task"
+    else
+    --> [No] "Do nothing"
+    --> "Get next task"
+    Endif
+"Get next task" --> "Check if user exits"
+else
+--> [Yes] "Stop Timer"
+--> ===B2===
+EndIf
+===B2=== --> "ProductiveNUS closes"
+-->(*)
+@enduml

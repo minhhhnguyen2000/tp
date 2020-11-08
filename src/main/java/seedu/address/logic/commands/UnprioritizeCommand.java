@@ -79,4 +79,11 @@ public class UnprioritizeCommand extends NegateCommand {
         return new Assignment(updatedName, updatedDeadline, updatedModuleCode, updatedRemind, updatedSchedule,
                 priority, updatedDone);
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof UnprioritizeCommand // instanceof handles nulls
+                && getTargetIndex().equals(((UnprioritizeCommand) other).getTargetIndex())); // state check
+    }
 }

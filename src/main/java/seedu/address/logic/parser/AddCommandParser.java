@@ -24,8 +24,6 @@ import seedu.address.model.task.Time;
  */
 public class AddCommandParser implements Parser<AddCommand> {
 
-    private static final int NO_OCCURRENCE_FOUND = -1;
-
     /**
      * Parses the given {@code String} of arguments in the context of the AddCommand
      * and returns an AddCommand object for execution.
@@ -34,12 +32,12 @@ public class AddCommandParser implements Parser<AddCommand> {
     public AddCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap;
 
-        boolean isRemindPresent = args.matches(".*\\bremind\\b$");
+        boolean isRemindPresent = args.matches(".*\\bremind\\b.*");
         boolean isRemindTypo = false;
         boolean isPriorityPresent = args.matches(".*\\bp/\\b.*");
 
         if (!isRemindPresent) {
-            isRemindTypo = args.matches(".*rem[a-z]*$");
+            isRemindTypo = args.matches(".*re[a-z]*$");
         }
 
         if (isRemindPresent || isRemindTypo) {

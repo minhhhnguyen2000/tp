@@ -3,10 +3,16 @@
 skinparam arrowThickness 1.1
 skinparam arrowColor LOGIC_COLOR_T4
 skinparam classBackgroundColor LOGIC_COLOR
+skinparam classAttributeFontColor #FFFFFF
+show members
 
 package Commands {
 Class "{abstract}\nCommand" as Command
-Class "{abstract}\nNegateCommand" as NegateCommand
+Class "{abstract}\nNegateCommand" as NegateCommand {
+    {static} COMMAND_WORD : String = "un"
+    index : Index
+    getTargetIndex(targetIndex : Index)
+}
 
 Class UnremindCommand
 Class UnprioritizeCommand

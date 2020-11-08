@@ -6,7 +6,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.UnprioritizeCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
-public class UnprioritizeCommandParser {
+public class UnprioritizeCommandParser implements Parser<UnprioritizeCommand> {
 
     /**
      * Parses the given {@code String} of arguments in the context of the UnprioritiseCommand

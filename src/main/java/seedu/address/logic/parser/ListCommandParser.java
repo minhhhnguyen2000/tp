@@ -13,7 +13,7 @@ public class ListCommandParser implements Parser<ListCommand> {
     public ListCommand parse(String args) throws ParseException {
         boolean hasArgumentIndex = args.matches("(.+|[$&+,:;=?@#|'<>.^*()%!-])$"); //Has argument
         if (!hasArgumentIndex) {
-            return new ListCommand(Index.fromZeroBased(0));
+            return new ListCommand();
         } else {
             boolean isWithinArgumentRange = args.trim().matches("^([1-9]|[1-4][0-9]|50)$"); //Argument range is 1 to 50
             if (isWithinArgumentRange) {

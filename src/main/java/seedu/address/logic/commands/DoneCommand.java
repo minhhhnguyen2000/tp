@@ -30,8 +30,10 @@ public class DoneCommand extends Command {
 
     public static final String MESSAGE_MARK_ASSIGNMENT_AS_DONE_SUCCESS = "Marks assignment as done: %1$s";
     public static final String MESSAGE_MARK_ASSIGNMENTS_AS_DONE_SUCCESS = "Mark assignments as done: %1$s";
+
     // for done single index
     public static final String MESSAGE_ALREADY_MARKED_ASSIGNMENT_AS_DONE = "This assignment is already marked as done.";
+
     // for done multiple indexes
     public static final String MESSAGE_MULTIPLE_ALREADY_MARKED_ASSIGNMENTS_AS_DONE =
             "These assignments are already marked as done: %1$s";
@@ -55,8 +57,6 @@ public class DoneCommand extends Command {
         List<Assignment> lastShownList = model.getFilteredAssignmentList();
         List<Assignment> assignmentsToMarkDone = new ArrayList<>();
         List<Integer> assignmentsAlreadyMarkedDone = new ArrayList<>();
-
-        targetIndexes.sort(CommandLogic.INDEX_COMPARATOR);
 
         CommandLogic.checkForDuplicatedIndexes(targetIndexes);
         CommandLogic.checkForInvalidIndexes(targetIndexes, model, DoneCommand.MESSAGE_USAGE);
@@ -83,8 +83,6 @@ public class DoneCommand extends Command {
 
         if (hasException) {
             if (isMultipleIndexes && assignmentsAlreadyMarkedDone.size() > 1) {
-                // sort so that the numbers will appear in ascending order later
-                assignmentsAlreadyMarkedDone.sort(null);
                 throw new CommandException(String.format(MESSAGE_MULTIPLE_ALREADY_MARKED_ASSIGNMENTS_AS_DONE,
                         assignmentsAlreadyMarkedDone));
             } else if (isMultipleIndexes) {

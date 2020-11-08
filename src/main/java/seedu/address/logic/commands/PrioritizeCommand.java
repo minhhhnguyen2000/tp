@@ -80,4 +80,12 @@ public class PrioritizeCommand extends Command {
         return new Assignment(updatedName, updatedDeadline, updatedModuleCode, updatedRemind, updatedSchedule,
                 updatedPriority, updatedDone);
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return other == this // short circuit if same object
+                || (other instanceof PrioritizeCommand // instanceof handles nulls
+                && targetIndex.equals(((PrioritizeCommand) other).targetIndex) // state check
+                && priority.equals(((PrioritizeCommand) other).priority));
+    }
 }

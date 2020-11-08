@@ -17,8 +17,8 @@ public class DoneCommandParser implements Parser<DoneCommand> {
      */
     public DoneCommand parse(String args) throws ParseException {
         try {
-            List<Index> indexes = ParserUtil.parseIndexes(args);
-            return new DoneCommand(indexes);
+            List<Index> parsedIndexes = ParserUtil.parseIndexes(args);
+            return new DoneCommand(parsedIndexes);
         } catch (ParseException pe) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, DoneCommand.MESSAGE_USAGE), pe);

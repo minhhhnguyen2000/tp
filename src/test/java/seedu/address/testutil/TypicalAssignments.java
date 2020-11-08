@@ -26,8 +26,8 @@ public class TypicalAssignments {
             .withModuleCode("CS2103T").withDeadline("02-03-2020 2359").build();
     public static final Assignment CS2106_LAB = new AssignmentBuilder().withName("CS2106 Lab")
             .withDeadline("12-12-2020 1200").withModuleCode("CS2106").build();
-    public static final Assignment CS2106_TUTORIAL_QUIZ = new AssignmentBuilder().withName("CS2106 Tutorial Quiz")
-            .withDeadline("03-03-2020 0300").withModuleCode("CS2106").build();
+    public static final Assignment CS2106_TUTORIAL_QUIZ = new AssignmentBuilder().withName("CS2102 Tutorial Quiz")
+            .withDeadline("03-03-2020 0300").withModuleCode("CS2102").build();
     public static final Assignment IS1103_MISSION = new AssignmentBuilder().withName("IS1103 Mission")
             .withDeadline("12-10-2020 1900").withModuleCode("IS1103").build();
     public static final Assignment PEER_REVIEW = new AssignmentBuilder().withName("Peer review")

@@ -1,0 +1,75 @@
+@startuml
+!include style.puml
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":ProductiveNusParser" as ProductiveNusParser LOGIC_COLOR
+participant ":AddCommandParser" as AddCommandParser LOGIC_COLOR
+participant ":AddCommand" as AddCommand LOGIC_COLOR
+participant ":CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant ":Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("add n/Lab mod/CS2103 d/10-10-2020 2359")
+activate LogicManager
+
+LogicManager -> ProductiveNusParser : parseCommand("add n/Lab mod/CS2103 d/10-10-2020 2359")
+activate ProductiveNusParser
+
+create AddCommandParser
+ProductiveNusParser -> AddCommandParser
+activate AddCommandParser
+
+AddCommandParser --> ProductiveNusParser
+deactivate AddCommandParser
+
+ProductiveNusParser -> AddCommandParser : parse("n/Lab mod/cS2103 d/10-10-2020 2359")
+activate AddCommandParser
+
+create AddCommand
+AddCommandParser -> AddCommand : AddCommand(assignment)
+activate AddCommand
+
+AddCommand --> AddCommandParser
+deactivate AddCommand
+
+AddCommandParser --> ProductiveNusParser
+deactivate AddCommandParser
+'Hidden arrow to position the destroy marker below the end of the activation bar.
+AddCommandParser -[hidden]-> ProductiveNusParser
+destroy AddCommandParser
+
+ProductiveNusParser --> LogicManager
+deactivate ProductiveNusParser
+
+LogicManager -> AddCommand : execute()
+activate AddCommand
+
+AddCommand -> Model : hasAssignment(toAdd)
+activate Model
+
+Model --> AddCommand
+deactivate Model
+
+AddCommand -> Model : addAssignment(toAdd)
+activate Model
+
+Model --> AddCommand
+deactivate Model
+
+create CommandResult
+AddCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> AddCommand
+deactivate CommandResult
+
+AddCommand --> LogicManager : result
+deactivate AddCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml

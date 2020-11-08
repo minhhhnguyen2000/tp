@@ -6,6 +6,7 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_ASSIGNMENT;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import seedu.address.commons.core.Messages;
@@ -15,7 +16,7 @@ import seedu.address.model.assignment.Assignment;
 import seedu.address.model.task.Time;
 
 /**
- * Lists all tasks in ProductiveNUS to the user.
+ * Lists assignments in ProductiveNUS to the user.
  */
 public class ListCommand extends Command {
 
@@ -26,7 +27,7 @@ public class ListCommand extends Command {
 
     public static final String MESSAGE_INDEX_NOT_IN_RANGE = "Index should only be from 1 to 50.";
 
-    private final Index numberOfDays;
+    private final Optional<Index> numberOfDays;
 
     /**
      * Constructor of List Command which takes in an Index.
@@ -34,7 +35,11 @@ public class ListCommand extends Command {
      */
     public ListCommand(Index numberOfDays) {
         assert numberOfDays != null;
-        this.numberOfDays = numberOfDays;
+        this.numberOfDays = Optional.of(numberOfDays);
+    }
+
+    public ListCommand() {
+        numberOfDays = Optional.empty();
     }
 
     private Predicate<Assignment> showLimitedAssignments() {
@@ -43,7 +48,10 @@ public class ListCommand extends Command {
                     .withResolverStyle(ResolverStyle.STRICT);
             String dateAndTimeToParse = assignment.getDeadline().value;
             LocalDateTime currentDateAndTime = LocalDateTime.now();
-            LocalDateTime lastDateAndTime = currentDateAndTime.plusDays(numberOfDays.getZeroBased());
+            assert numberOfDays.isPresent();
+            int zeroBaseValue = numberOfDays.get().getZeroBased();
+            long inputNumberOfDays = Optional.of(zeroBaseValue).get();
+            LocalDateTime lastDateAndTime = currentDateAndTime.plusDays(inputNumberOfDays);
             LocalDateTime parsedDateAndTime = LocalDateTime.parse(dateAndTimeToParse, inputFormat);
 
             boolean isAfterCurrentDateAndTime = parsedDateAndTime.isAfter(currentDateAndTime);
@@ -56,7 +64,7 @@ public class ListCommand extends Command {
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
-        if (numberOfDays.getZeroBased() == 0) {
+        if (numberOfDays.isEmpty()) {
             model.updateFilteredAssignmentList(PREDICATE_SHOW_ALL_ASSIGNMENT);
         } else {
             model.updateFilteredAssignmentList((showLimitedAssignments()));

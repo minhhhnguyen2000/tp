@@ -29,7 +29,17 @@ public class RemindCommand extends Command {
             + " INDEX [MORE_INDEXES] (must be positive integers)";
 
     public static final String MESSAGE_REMIND_ASSIGNMENT_SUCCESS = "Set reminder for Assignment: %1$s";
-    public static final String MESSAGE_REMINDED_ASSIGNMENT = "This assignment already has reminders set: %1$s";
+    public static final String MESSAGE_REMIND_ASSIGNMENTS_SUCCESS = "Mark assignments as done: %1$s";
+
+    // for single index
+    public static final String MESSAGE_REMINDED_ASSIGNMENT = "This assignment already has reminders set.";
+
+    // for multiple indexes
+    public static final String MESSAGE_MULTIPLE_REMINDED_ASSIGNMENT = "This assignment already has reminders set: %1$s";
+    public static final String MESSAGE_MULTIPLE_REMINDED_ASSIGNMENTS =
+            "These assignments already have reminders set: %1$s";
+
+
 
     private final List<Index> targetIndexes;
 
@@ -47,17 +57,21 @@ public class RemindCommand extends Command {
         requireNonNull(model);
         List<Assignment> lastShownList = model.getFilteredAssignmentList();
         List<Assignment> assignmentsToRemind = new ArrayList<>();
-
-        targetIndexes.sort(CommandLogic.INDEX_COMPARATOR);
+        List<Integer> assignmentsAlreadyReminded = new ArrayList<>();
 
         CommandLogic.checkForDuplicatedIndexes(targetIndexes);
         CommandLogic.checkForInvalidIndexes(targetIndexes, model, RemindCommand.MESSAGE_USAGE);
+
+        boolean isMultipleIndexes = targetIndexes.size() > 1;
+        boolean hasException = false;
 
         for (Index targetIndex : targetIndexes) {
             Assignment assignmentToRemind = lastShownList.get(targetIndex.getZeroBased());
 
             if (assignmentToRemind.isReminded() && model.hasAssignment(assignmentToRemind)) {
-                throw new CommandException(String.format(MESSAGE_REMINDED_ASSIGNMENT, assignmentToRemind));
+                hasException = true;
+                assignmentsAlreadyReminded.add(targetIndex.getOneBased());
+                continue;
             }
 
             assert(!assignmentToRemind.isReminded());
@@ -68,7 +82,21 @@ public class RemindCommand extends Command {
             assignmentsToRemind.add(assignmentToRemind);
         }
 
-        return new CommandResult(String.format(MESSAGE_REMIND_ASSIGNMENT_SUCCESS, assignmentsToRemind));
+        if (hasException) {
+            if (isMultipleIndexes && assignmentsAlreadyReminded.size() > 1) {
+                throw new CommandException(String.format(MESSAGE_MULTIPLE_REMINDED_ASSIGNMENTS,
+                        assignmentsAlreadyReminded));
+            } else if (isMultipleIndexes) {
+                throw new CommandException(String.format(MESSAGE_MULTIPLE_REMINDED_ASSIGNMENT,
+                        assignmentsAlreadyReminded));
+            } else {
+                throw new CommandException(MESSAGE_REMINDED_ASSIGNMENT);
+            }
+        }
+
+        return isMultipleIndexes
+                ? new CommandResult(String.format(MESSAGE_REMIND_ASSIGNMENTS_SUCCESS, assignmentsToRemind))
+                : new CommandResult(String.format(MESSAGE_REMIND_ASSIGNMENT_SUCCESS, assignmentsToRemind));
     }
 
     /**

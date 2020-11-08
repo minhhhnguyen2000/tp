@@ -1,6 +1,7 @@
 package seedu.address.model.assignment;
 
 import static seedu.address.commons.util.AppUtil.checkArgument;
+import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import seedu.address.model.task.Time;
 
@@ -31,14 +32,23 @@ public class Schedule {
      * Constructs a suggested schedule
      */
     public Schedule(Time suggestedStartTime, Time suggestedEndTime) {
-        checkArgument(isValidSchedule(suggestedStartTime, suggestedEndTime), MESSAGE_CONSTRAINTS);
+        requireAllNonNull(suggestedStartTime, suggestedEndTime);
+        checkArgument(isValidSchedule(true, suggestedStartTime, suggestedEndTime), MESSAGE_CONSTRAINTS);
         schedule = true;
         this.suggestedStartTime = suggestedStartTime;
         this.suggestedEndTime = suggestedEndTime;
     }
 
-    public boolean isValidSchedule(Time suggestedStartTime, Time suggestedEndTime) {
-        return suggestedStartTime.isBefore(suggestedEndTime);
+    /**
+     * Returns true if a given schedule is a valid schedule
+     */
+    public static boolean isValidSchedule(boolean schedule, Time suggestedStartTime, Time suggestedEndTime) {
+        if (!schedule) {
+            return (suggestedStartTime == null && suggestedEndTime == null);
+        } else {
+            requireAllNonNull(suggestedStartTime, suggestedEndTime);
+            return !suggestedEndTime.isBefore(suggestedStartTime);
+        }
     }
 
     public boolean isScheduled() {

@@ -12,7 +12,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.timetable.TimetableData;
 import seedu.address.timetable.TimetableUrlParser;
 
-public class ImportCommandParser {
+public class ImportCommandParser implements Parser<ImportCommand> {
     /**
      * Parses the given {@code String} of arguments in the context of the ImportCommand
      * and returns an ImportCommand object for execution.

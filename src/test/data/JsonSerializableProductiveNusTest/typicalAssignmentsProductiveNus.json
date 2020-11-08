@@ -25,9 +25,9 @@
     "isReminded" : true,
     "isScheduled" : true
   }, {
-    "name" : "CS2106 Tutorial Quiz",
+    "name" : "CS2102 Tutorial Quiz",
     "deadline" : "03-03-2020 0300",
-    "moduleCode" : "CS2106",
+    "moduleCode" : "CS2102",
     "suggestedStartTime" : "",
     "suggestedEndTime" : "",
     "isReminded" : true,

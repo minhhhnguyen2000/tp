@@ -3,15 +3,32 @@
 skinparam arrowThickness 1.1
 skinparam arrowColor LOGIC_COLOR_T4
 skinparam classBackgroundColor MODEL_COLOR
+skinparam classAttributeFontColor #FFFFFF
+show members
+scale 1024 width
+scale 1000 height
 
 interface "<<Interface>>\nPredicate<Assignment>"
-"<<Interface>>\nPredicate<Assignment>" : test(Assignment)
+"<<Interface>>\nPredicate<Assignment>" : test(Assignment): boolean
 
 Package Assignment {
-Class NameContainsKeywordsPredicate
-Class ModuleCodeContainsKeywordsPredicate
-Class DeadlineContainsKeywordsPredicate
-Class PriorityContainsKeywordsPredicate
+scale max 800 height
+Class NameContainsKeywordsPredicate {
+    keywords: List<String>
+    test(Assignment): boolean
+}
+Class ModuleCodeContainsKeywordsPredicate {
+    keywords: List<String>
+    test(Assignment): boolean
+}
+Class DeadlineContainsKeywordsPredicate {
+    keywords: List<String>
+    test(Assignment): boolean
+}
+Class PriorityContainsKeywordsPredicate {
+    keywords: List<String>
+    test(Assignment): boolean
+}
 }
 
 NameContainsKeywordsPredicate ..up|> "<<Interface>>\nPredicate<Assignment>"

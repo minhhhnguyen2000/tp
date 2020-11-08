@@ -21,6 +21,8 @@ import seedu.address.testutil.AssignmentBuilder;
 public class UnremindCommandTest {
 
     private Model model = new ModelManager(getTypicalProductiveNus(), new UserPrefs(), null);
+    private final Index indexLastAssignment = Index.fromOneBased(
+            model.getProductiveNus().getAssignmentList().size());
 
     @Test
     public void constructor_nullAssignment_throwsNullPointerException() {
@@ -29,6 +31,7 @@ public class UnremindCommandTest {
 
     @Test
     public void execute_validIndex_success() {
+        // Remove first assignment from reminded assignment list
         remindFirstAssignment();
         Assignment assignmentToUnremind = model.getRemindedAssignmentsList().get(INDEX_FIRST_ASSIGNMENT.getZeroBased());
         UnremindCommand unremindCommand = new UnremindCommand(INDEX_FIRST_ASSIGNMENT);
@@ -41,14 +44,42 @@ public class UnremindCommandTest {
         expectedModel.setAssignment(model.getRemindedAssignmentsList().get(0), assignmentToUnremind);
 
         assertCommandSuccess(unremindCommand, model, expectedMessage, expectedModel);
+
+        // Remove last assignment from reminded assignment list
+        remindFirstAssignment();
+        remindSecondAssignment();
+        remindLastAssignment();
+        Index indexLastRemindedAssignment = Index.fromOneBased(
+                model.getRemindedAssignmentsList().size());
+
+        Assignment assignmentToUnremindLast = model.getRemindedAssignmentsList()
+                .get(indexLastRemindedAssignment.getZeroBased());
+        UnremindCommand unremindCommandLast = new UnremindCommand(indexLastRemindedAssignment);
+
+        String expectedMessageLast = String.format(
+                UnremindCommand.MESSAGE_UNREMIND_ASSIGNMENT_SUCCESS, assignmentToUnremindLast);
+
+        ModelManager expectedModelLast = new ModelManager(model.getProductiveNus(), new UserPrefs(),
+                model.getPreviousModel());
+        expectedModelLast.setAssignment(model.getRemindedAssignmentsList()
+                .get(indexLastRemindedAssignment.getZeroBased()), assignmentToUnremindLast);
+
+        assertCommandSuccess(unremindCommandLast, model, expectedMessageLast, expectedModelLast);
     }
 
     @Test
     public void execute_invalidIndex_throwsCommandException() {
+        // Reminded assignment list size + 1 (boundary value)
         Index outOfBoundIndex = Index.fromOneBased(model.getRemindedAssignmentsList().size() + 1);
         UnremindCommand unremindCommand = new UnremindCommand(outOfBoundIndex);
 
         assertCommandFailure(unremindCommand, model, UnremindCommand.MESSAGE_INVALID_DISPLAYED_REMINDERS_INDEX);
+
+        // Index 0 (boundary value)
+        Index zeroIndex = Index.fromZeroBased(0);
+        UnremindCommand unremindCommand1 = new UnremindCommand(zeroIndex);
+
+        assertCommandFailure(unremindCommand1, model, UnremindCommand.MESSAGE_INVALID_DISPLAYED_REMINDERS_INDEX);
     }
 
     @Test
@@ -76,7 +107,7 @@ public class UnremindCommandTest {
         assertFalse(unremindFirstCommand.equals(unremindSecondCommand));
     }
 
-    // Reminded first assignment in filtered list
+    // Set reminders for first assignment in filtered list
     private void remindFirstAssignment() {
         // Set reminders for assignment in filtered list in ProductiveNus
         Assignment assignmentInList = model.getProductiveNus().getAssignmentList()
@@ -85,11 +116,20 @@ public class UnremindCommandTest {
         model.setAssignment(assignmentInList, assignmentInListReminded);
     }
 
-    // Reminded second assignment in filtered list
+    // Set reminders for second assignment in filtered list
     private void remindSecondAssignment() {
         // Set reminders for assignment in filtered list in ProductiveNus
         Assignment assignmentInList = model.getProductiveNus().getAssignmentList()
                 .get(INDEX_SECOND_ASSIGNMENT.getZeroBased());
+        Assignment assignmentInListReminded = new AssignmentBuilder(assignmentInList).withRemindersSet().build();
+        model.setAssignment(assignmentInList, assignmentInListReminded);
+    }
+
+    // Set reminders for last assignment in filtered list
+    private void remindLastAssignment() {
+        // Set reminders for assignment in filtered list in ProductiveNus
+        Assignment assignmentInList = model.getProductiveNus().getAssignmentList()
+                .get(indexLastAssignment.getZeroBased());
         Assignment assignmentInListReminded = new AssignmentBuilder(assignmentInList).withRemindersSet().build();
         model.setAssignment(assignmentInList, assignmentInListReminded);
     }

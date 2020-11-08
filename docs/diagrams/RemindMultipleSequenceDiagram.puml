@@ -1,14 +1,14 @@
 @startuml
 !include style.puml
 skinparam ParticipantFontSize 30
-skinparam ArrowFontSize 28
-skinparam defaultFontSize 28
+skinparam ArrowFontSize 30
+skinparam defaultFontSize 30
 
 box LOGIC_COLOR_T1
 participant ":LogicManager" as LogicManager LOGIC_COLOR
-participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant ":ProductiveNusParser" as ProductiveNusParser LOGIC_COLOR
 participant ":RemindCommandParser" as RemindCommandParser LOGIC_COLOR
-participant "d:RemindCommand" as RemindCommand LOGIC_COLOR
+participant ":RemindCommand" as RemindCommand LOGIC_COLOR
 participant ":CommandLogic" as CommandLogic LOGIC_COLOR
 participant ":CommandResult" as CommandResult LOGIC_COLOR
 end box
@@ -17,64 +17,69 @@ box MODEL_COLOR_T1
 participant ":Model" as Model MODEL_COLOR
 end box
 
-[-> LogicManager : execute("remind 2 3")
+[-> LogicManager : execute("remind 1 3")
 activate LogicManager
 
-LogicManager -> AddressBookParser : parseCommand("remind 2 3")
-activate AddressBookParser
+LogicManager -> ProductiveNusParser : parseCommand("remind 1 3")
+activate ProductiveNusParser
 
 create RemindCommandParser
-AddressBookParser -> RemindCommandParser
+ProductiveNusParser -> RemindCommandParser
 activate RemindCommandParser
 
-RemindCommandParser --> AddressBookParser
+RemindCommandParser --> ProductiveNusParser
 deactivate RemindCommandParser
 
-AddressBookParser -> RemindCommandParser : parse("2 3")
+ProductiveNusParser -> RemindCommandParser : parse("1 3")
 activate RemindCommandParser
 
 create RemindCommand
-RemindCommandParser -> RemindCommand
+RemindCommandParser -> RemindCommand : RemindCommand(parsedIndexes)
 activate RemindCommand
 
-RemindCommand --> RemindCommandParser : d
+RemindCommand --> RemindCommandParser
 deactivate RemindCommand
 
-RemindCommandParser --> AddressBookParser : d
+RemindCommandParser --> ProductiveNusParser
 deactivate RemindCommandParser
 'Hidden arrow to position the destroy marker below the end of the activation bar.
-RemindCommandParser -[hidden]-> AddressBookParser
+RemindCommandParser -[hidden]-> ProductiveNusParser
 destroy RemindCommandParser
 
-AddressBookParser --> LogicManager : d
-deactivate AddressBookParser
+ProductiveNusParser --> LogicManager
+deactivate ProductiveNusParser
 
 LogicManager -> RemindCommand : execute()
 activate RemindCommand
 
-RemindCommand -> CommandLogic : checkForDuplicatedIndexes([2, 3])
+RemindCommand -> CommandLogic : checkForDuplicatedIndexes([1 3])
 activate CommandLogic
 
-CommandLogic -> RemindCommand
+CommandLogic --> RemindCommand
 deactivate CommandLogic
 
-RemindCommand -> CommandLogic : checkForInvalidIndexes([2, 3])
+RemindCommand -> CommandLogic : checkForInvalidIndexes([1 3])
 activate CommandLogic
 
-CommandLogic -> RemindCommand
+CommandLogic --> RemindCommand
 deactivate CommandLogic
+
+
 
 loop 2 times
-    'Not very sure how to label the call method for this
-    RemindCommand -> Model : setAssignment(assignmentAtIndex, remindedAssignment)
+    RemindCommand -> Model : get
     activate Model
+    Model --> RemindCommand : assignmentToRemind
+    deactivate Model
 
+    RemindCommand -> Model : setAssignment(assignmentToRemind, remindedAssignment)
+    activate Model
     Model --> RemindCommand
     deactivate Model
 end
 
 create CommandResult
-RemindCommand -> CommandResult
+RemindCommand -> CommandResult : CommandResult(assignmentsToRemind)
 activate CommandResult
 
 CommandResult --> RemindCommand

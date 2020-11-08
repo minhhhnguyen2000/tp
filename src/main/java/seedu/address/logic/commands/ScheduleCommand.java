@@ -39,6 +39,8 @@ public class ScheduleCommand extends Command {
     public static final int MIN_HOURS = 1;
     public static final String COMMAND_WORD = "schedule";
     public static final String MESSAGE_SCHEDULE_ASSIGNMENT_SUCCESS = "Schedule Assignment: %1$s";
+    public static final String MESSAGE_SCHEDULE_ASSIGNMENT_FAIL = "No possible schedule";
+    public static final String MESSAGE_ASSIGNMENT_DUE = "The deadline of this assignment is over";
     public static final String MESSAGE_USAGE = "Format: " + COMMAND_WORD + " INDEX (must be a positive integer) "
             + PREFIX_EXPECTED_HOURS + "EXPECTED HOURS (must be between " + MIN_HOURS + " and " + MAX_HOURS + " hours) "
             + PREFIX_DO_AFTER + "AFTER " + PREFIX_DO_BEFORE + "BEFORE";
@@ -74,6 +76,10 @@ public class ScheduleCommand extends Command {
 
         Assignment assignmentToSchedule = lastShownList.get(targetIndex.getZeroBased());
 
+        // assignment is already due
+        if (assignmentToSchedule.getDeadline().toLocalDateTime().isBefore(LocalDateTime.now())) {
+            throw new CommandException(MESSAGE_ASSIGNMENT_DUE);
+        }
 
         List<Task> taskList = new ArrayList<>(model.getFilteredTaskList());
         taskList.remove(assignmentToSchedule);
@@ -100,7 +106,7 @@ public class ScheduleCommand extends Command {
         List<LocalDateTime> possibleTime = generateAllPossibleTime(after, before, taskList);
 
         if (possibleTime.isEmpty()) {
-            throw new CommandException("No possible schedule");
+            throw new CommandException(MESSAGE_SCHEDULE_ASSIGNMENT_FAIL);
         }
         return getRandom(possibleTime);
     }
@@ -178,6 +184,9 @@ public class ScheduleCommand extends Command {
     public boolean equals(Object other) {
         return other == this // short circuit if same object
                 || (other instanceof ScheduleCommand // instanceof handles nulls
-                && targetIndex.equals(((ScheduleCommand) other).targetIndex)); // state check
+                && targetIndex.equals(((ScheduleCommand) other).targetIndex)
+                && doAfter.equals(((ScheduleCommand) other).doAfter)
+                && doBefore.equals(((ScheduleCommand) other).doBefore)
+                && expectedHours == ((ScheduleCommand) other).expectedHours); // state check
     }
 }
