@@ -77,7 +77,7 @@ The sections below give more details of each component.
 **API** :
 [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
+The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `AssignmentListPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class.
 
 The `UI` component uses JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
 
@@ -116,6 +116,7 @@ The `Model`,
 
 * stores a `UserPref` object that represents the user’s preferences.
 * stores the data in ProductiveNUS.
+* stores a `Model` object that represents the state of the `Model` before the most recent command.
 * exposes an unmodifiable `ObservableList<Assignment>` and an unmodifiable `ObservableList<Task>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 
 ### Storage component
@@ -173,7 +174,7 @@ takes in the input.
  returns a list of lessons to be added.
 7. The `execute` method returns a `CommandResult` object.
 
-### \[Implemented\] Schedule an assignment
+### Schedule an assignment
 
 The user can input a deadline and expected time for an assignment to get a suggested start time and end time to work on the assignment.
 The suggested time will be within working hours from 6am to 11pm local time.
@@ -365,14 +366,14 @@ the `updatedFilteredAssignmentList` method of a `Model` object, `model`. If the 
 The following is a usage scenario of when the user wants to list assignments that are due within the next 3 days from now.
 
 1. `execute("list 3")` of `LogicManager` calls the `parseCommand` method of `ProductiveNusParser`.
- 1. `parseCommand("list 3")` parses the String `"list 3"` and returns an initialized `ListCommandParser` object. 
- 1. `parseCommand("List 3")` calls the `parse` method in `ListCommandParser` to return a `ListCommand` object.
- 1. There is return call to `LogicManager` which then calls the overridden `execute` method of `ListCommand`.
- 1. The `execute` method of `ListCommand` will call the `updateFilteredAssignmentList` method of the object `model`, which takes in `showLimitedAssignments` predicate.
- 1. If `getZeroBased` value of `Index` attribute `numberOfDays` is 0, it would take in `PREDICATE_SHOW_ALL_ASSIGNMENT`. Else, it would take in `showLimitedAssignments` to return assignments that passes this predicate.
- 1. The `execute()` method returns a `CommandResult` object.
+1. `parseCommand("list 3")` parses the String `"list 3"` and returns an initialized `ListCommandParser` object. 
+1. `parseCommand("List 3")` calls the `parse` method in `ListCommandParser` to return a `ListCommand` object.
+1. There is return call to `LogicManager` which then calls the overridden `execute` method of `ListCommand`.
+1. The `execute` method of `ListCommand` will call the `updateFilteredAssignmentList` method of the object `model`, which takes in `showLimitedAssignments` predicate.
+1. If `getZeroBased` value of `Index` attribute `numberOfDays` is 0, it would take in `PREDICATE_SHOW_ALL_ASSIGNMENT`. Else, it would take in `showLimitedAssignments` to return assignments that passes this predicate.
+1. The `execute()` method returns a `CommandResult` object.
  
- Given below is the sequence diagram for the interactions within `LogicManager` for the `execute(list 3)` API call.
+Given below is the sequence diagram for the interactions within `LogicManager` for the `execute(list 3)` API call.
 
 
 DIAGRAM
