@@ -1397,7 +1397,61 @@ These instructions only provide a starting point for testers to work on; testers
 
    1. Wait till the current time passes the end time of the lesson (if end time is 1230, wait till the clock on your computer is 1230).<br>
       Expected: The first task is removed from `Upcoming tasks`.
+
+### Scheduling assignments
+
+1. Scheduling one assignment while all assignments are being shown
+   1. Prerequisites: List all assignments using the `list` command. Multiple assignments in the list. No assignments scheduled.
+   
+   1. Test case: `schedule 1 hrs/2 af/01-01-2020 1800 by/01-01-2021 2359` <br>
+      Expected: First assignment in assignment list is scheduled. Details of the assignment shown in the Message Box.
       
+   1. Test case: `schedule 0 hrs/2 af/01-01-2020 1800 by/01-01-2021 2359` <br>
+      Expected: No assignment scheduled. Error details shown int the Message box.
+      
+   1. Other incorrect schedule commands to try: `schedule`, `schedule 1`, `schedule 1 hrs/100`, `...` <br>
+      Expected: Similar to previous.
+
+1. Scheduling one assignment as done while some assignments are being shown
+   1. Prerequisites: List some assignments using the `list x` command (where x is number of days from current date and time such that only some assignments are shown). Multiple assignments in the list. No assignments marked as done.
+   
+   1. Test case: `schedule 1 hrs/2 af/01-01-2020 1800 by/01-01-2021 2359` <br>
+      Expected: Similar to `schedule 1 hrs/2 af/01-01-2020 1800 by/01-01-2021 2359` test case when all assignments are shown.
+         
+   1. Test case: `schedule 0 hrs/2 af/01-01-2020 1800 by/01-01-2021 2359` <br>
+      Expected: Similar to `schedule 1 hrs/2 af/01-01-2020 1800 by/01-01-2021 2359` test case when all assignments are shown.
+         
+   1. Other incorrect schedule commands to try: `schedule`, `schedule 1`, `schedule 1 hrs/100`, `...` <br>
+      Expected: Similar to previous.
+      
+### Removing scheduler for assignments
+
+1. Removing scheduler for one assignment while all assignments are being shown
+   1. Prerequisites: List all assignments using the `list` command. Multiple assignments in the list. 1st assignment scheduled.
+   
+   1. Test case: `unschedule 1` <br>
+      Expected: First assignment in assignment list is unscheduled. Details of the assignment shown in the Message Box.
+      
+   1. Test case: `unschedule 0` <br>
+      Expected: No assignment unscheduled. Error details shown int the Message box.
+      
+   1. Other incorrect schedule commands to try: `unschedule`, `unsche 1`, `...` <br>
+      Expected: Similar to previous.
+
+1. Removing scheduler for one assignment while some assignments are being shown
+   1. Prerequisites: List some assignments using the `list x` command (where x is number of days from current date and time such that only some assignments are shown). Multiple assignments in the list. No assignments marked as done.
+   
+   1. Test case: `unschedule 1` <br>
+      Expected: Similar to `unschedule 1` test case when all assignments are shown.
+         
+   1. Test case: `unschedule 0` <br>
+      Expected: Similar to `schedule 1` test case when all assignments are shown.
+         
+   1. Other incorrect schedule commands to try: `unschedule`, `unsche 1`, `...` <br>
+      Expected: Similar to previous.
+
+
+         
  
 ### Saving data
 
